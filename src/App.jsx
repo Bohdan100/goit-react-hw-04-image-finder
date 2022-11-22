@@ -4,7 +4,7 @@ import { GlobalStyle } from './GlobalStyle';
 
 import { AppContainer } from './App.styled';
 
-import SearchResult from './components/Searchbar/SearchResult';
+import { SearchResult } from './components/Searchbar/SearchResult';
 
 export const App = () => {
   return (

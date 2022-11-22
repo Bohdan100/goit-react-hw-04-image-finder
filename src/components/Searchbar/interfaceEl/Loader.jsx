@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Watch } from 'react-loader-spinner';
 
-import ImageGallery from '../ImageGallery/ImageGallery';
+import { ImageGallery } from '../ImageGallery/ImageGallery';
 
 export const Loader = ({ images, onClick }) => {
   return (

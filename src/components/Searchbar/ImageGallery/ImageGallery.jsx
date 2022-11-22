@@ -5,9 +5,11 @@ import PropTypes from 'prop-types';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import { Box } from '../SearchResult.styled';
 
-export const ImageGallery = ({ onClick, images }) => {
+export const ImageGallery = ({ images, onClick }) => {
+  console.log('ImageGallery', images);
   const handleClickFromItem = largeImage => {
     onClick(largeImage);
+    console.log(largeImage);
   };
 
   return (

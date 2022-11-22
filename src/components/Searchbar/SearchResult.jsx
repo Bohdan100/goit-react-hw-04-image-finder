@@ -31,7 +31,7 @@ export const SearchResult = () => {
   };
 
   const getFirstStatus = () => {
-    return JSON.parse(window.localStorage.getItem('Images')).length > 0
+    return JSON.parse(window.localStorage.getItem('Images'))
       ? Status.RESOLVED
       : defaultStatus;
   };
@@ -118,7 +118,7 @@ export const SearchResult = () => {
 
     // запись поискового слова
     previousNameRef.current = searchQuerry;
-  }, [page, searchQuerry, images]);
+  }, [page, searchQuerry]);
 
   const handleSearchbarSubmit = newSearchName => {
     if (newSearchName === searchQuerry) {
@@ -132,14 +132,19 @@ export const SearchResult = () => {
 
   const loadMore = () => {
     setPage(page + 1);
+
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   };
 
-  const handleClickFromItem = largeImage => {
-    setLargeImage(largeImage);
+  const handleClickFromItem = newLargeImage => {
+    setLargeImage(newLargeImage);
   };
 
   const onModalClose = () => {
-    this.setState({ largeImage: '' });
+    setLargeImage('');
   };
 
   return (
@@ -155,7 +160,7 @@ export const SearchResult = () => {
         <>
           <ImageGallery images={images} onClick={handleClickFromItem} />
           <Button loadMore={loadMore} />
-          {this.state.largeImage.length > 0 && (
+          {largeImage.length > 0 && (
             <Modal src={largeImage} onClose={onModalClose} />
           )}
         </>
