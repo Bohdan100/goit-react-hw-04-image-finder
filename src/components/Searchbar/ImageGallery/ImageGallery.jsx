@@ -1,15 +1,11 @@
-// Разметка галереи изображений по http-запросу
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import { ImageGalleryItem } from './ImageGalleryItem';
 import { Box } from '../SearchResult.styled';
 
 export const ImageGallery = ({ images, onClick }) => {
-  console.log('ImageGallery', images);
   const handleClickFromItem = largeImage => {
     onClick(largeImage);
-    console.log(largeImage);
   };
 
   return (
