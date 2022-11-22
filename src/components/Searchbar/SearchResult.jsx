@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -27,6 +27,7 @@ export const SearchResult = () => {
   const defaultStatus = Status.IDLE;
 
   const getFromLocalStorage = (key, defaultValue) => {
+    console.log('LocalStorage', JSON.parse(window.localStorage.getItem(key)));
     return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
   };
 
@@ -51,16 +52,10 @@ export const SearchResult = () => {
   const [status, setStatus] = useState(getFirstStatus());
 
   const [largeImage, setLargeImage] = useState('');
-  const previousNameRef = useRef();
 
   useEffect(() => {
     if (!searchQuerry) {
       return;
-    }
-
-    // Сравнение на новое поисковое слово, если да - то page = 1
-    if (searchQuerry !== previousNameRef.current) {
-      setPage(1);
     }
 
     async function getRequestImages() {
@@ -115,9 +110,6 @@ export const SearchResult = () => {
       }
     }
     getRequestImages();
-
-    // запись поискового слова
-    previousNameRef.current = searchQuerry;
   }, [page, searchQuerry]);
 
   const handleSearchbarSubmit = newSearchName => {
@@ -132,6 +124,7 @@ export const SearchResult = () => {
 
   const loadMore = () => {
     setPage(page + 1);
+    changeLocalStorage('Page', page);
 
     window.scrollTo({
       top: document.documentElement.scrollHeight,
