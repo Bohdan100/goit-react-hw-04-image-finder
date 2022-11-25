@@ -11,8 +11,12 @@ export async function fetchImages(name, page) {
   const url = `${BASE_URL}/?key=${API_key}&q=${name}&${image_type}&${orientation}&${safesearch}&page=${page}&per_page=${perPage}`;
 
   const responseObject = await axios.get(url);
-  const pictures = await responseObject.data.hits;
+  const requestImages = await responseObject.data.hits;
   const totalImages = await responseObject.data.total;
 
-  return { pictures, totalImages };
+  const renderImages = requestImages.map(({ id, largeImageURL, tags }) => {
+    return { id: id, largeImageURL: largeImageURL, tags: tags };
+  });
+
+  return { renderImages, totalImages };
 }

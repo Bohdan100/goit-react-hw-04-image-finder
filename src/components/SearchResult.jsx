@@ -1,10 +1,13 @@
 import { useReducer, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
+import { fetchImages } from 'apiRequest';
+import {
+  renderSuccesNotification,
+  notFoundNotification,
+  informativeNotification,
+} from 'toastNotification';
 import { Searchbar } from './Searchbar';
-import { fetchImages } from './apiRequest/apiRequest';
-import { ImageGallery } from './ImageGallery/ImageGallery';
+import { ImageGallery } from './ImageGallery';
 import { RequestError } from './interfaceEl/RequestError';
 import { Loader } from './interfaceEl/Loader';
 import { Button } from './interfaceEl/Button';
@@ -19,7 +22,7 @@ const Status = {
   REJECTED: 'rejected',
 };
 
-function countReducer(state, action) {
+const countReducer = (state, action) => {
   switch (action.type) {
     case 'searchQuerry':
       return { ...state, searchQuerry: action.payload };
@@ -42,9 +45,9 @@ function countReducer(state, action) {
     default:
       throw new Error(`Unsuported action type ${action.type}`);
   }
-}
+};
 
-// Function
+// Main function
 export const SearchResult = () => {
   const [state, dispatch] = useReducer(countReducer, {
     searchQuerry: '',
@@ -59,50 +62,23 @@ export const SearchResult = () => {
       return;
     }
 
+    dispatch({ type: 'status', payload: Status.PENDING });
+
     async function getRequestImages() {
       try {
-        dispatch({ type: 'status', payload: Status.PENDING });
-
         const response = await fetchImages(state.searchQuerry, state.page);
-        const responseImages = response.pictures;
-        const totalImages = response.totalImages;
+        const { renderImages, totalImages } = response;
 
-        if (state.page === 1 && responseImages.length === 0) {
-          toast.info('No images found for your request');
+        if (renderImages.length === 0) {
+          notFoundNotification();
           dispatch({ type: 'status', payload: Status.IDLE });
-          return;
-        }
-
-        if (state.page === 1 && responseImages.length !== 0) {
-          toast.success(
-            `${responseImages.length} images have been uploaded according to your request. 
-            Total search results - ${totalImages} images.`
-          );
-          dispatch({ type: 'images', payload: responseImages });
+        } else {
+          renderSuccesNotification(renderImages, totalImages, state.page);
           dispatch({ type: 'status', payload: Status.RESOLVED });
-          return;
-        }
-
-        if (state.page !== 1 && responseImages.length === 0) {
-          toast.info(
-            `Sorry, no more images found. 
-            Total search results - ${totalImages} images`
-          );
-          dispatch({ type: 'status', payload: Status.RESOLVED });
-          return;
-        }
-
-        if (state.page !== 1 && responseImages.length !== 0) {
-          toast.success(
-            `New ${responseImages.length} images have been uploaded according to your request. 
-            Total search results - ${totalImages} images.`
-          );
           dispatch({
             type: 'images',
-            payload: [...state.images, ...responseImages],
+            payload: [...state.images, ...renderImages],
           });
-          dispatch({ type: 'status', payload: Status.RESOLVED });
-          return;
         }
       } catch (error) {
         dispatch({ type: 'error', payload: error });
@@ -114,12 +90,13 @@ export const SearchResult = () => {
 
   const handleSearchbarSubmit = newSearchName => {
     if (newSearchName === state.searchQuerry) {
-      toast.info('🦄 You entered the previous search word!');
+      informativeNotification();
       return;
     }
 
     dispatch({ type: 'searchQuerry', payload: newSearchName });
     dispatch({ type: 'page', payload: 1 - state.page });
+    dispatch({ type: 'images', payload: [] });
     dispatch({ type: 'status', payload: Status.PENDING });
   };
 

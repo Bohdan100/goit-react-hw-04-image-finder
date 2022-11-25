@@ -12,28 +12,16 @@ import {
   SearchFormIcon,
   SearchFormBtnLabel,
   SearchFormInput,
-} from './SearchResult.styled';
+} from '../SearchResult.styled';
 
 export const Searchbar = ({ handleSearchbarSubmit }) => {
-  const defaultSearchName = '';
-
-  const getFromLocalStorage = (key, defaultValue) => {
-    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
-  };
-  const changeLocalStorage = (key, state) => {
-    window.localStorage.setItem(key, JSON.stringify(state));
-  };
-
-  const [searchName, setSearchName] = useState(
-    getFromLocalStorage('SearchName', defaultSearchName)
-  );
+  const [searchName, setSearchName] = useState('');
 
   const handleNameChange = e => {
     e.preventDefault();
 
     const { value } = e.target;
     setSearchName(value);
-    changeLocalStorage('SearchName', value);
   };
 
   const handleSubmit = e => {
