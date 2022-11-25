@@ -75,11 +75,12 @@ export const SearchResult = () => {
           dispatch({ type: 'status', payload: Status.IDLE });
         } else {
           renderSuccesNotification(renderImages, totalImages, state.page);
-          dispatch({ type: 'status', payload: Status.RESOLVED });
+
           dispatch({
             type: 'images',
             payload: [...state.images, ...renderImages],
           });
+          dispatch({ type: 'status', payload: Status.RESOLVED });
         }
       } catch (error) {
         dispatch({ type: 'error', payload: error });
