@@ -76,10 +76,10 @@ export const SearchResult = () => {
         } else {
           renderSuccesNotification(renderImages, totalImages, state.page);
 
-          dispatch({
-            type: 'images',
-            payload: [...state.images, ...renderImages],
-          });
+          // dispatch({
+          //   type: 'images',
+          //   payload: [...state.images, ...renderImages],
+          // });
           dispatch({ type: 'status', payload: Status.RESOLVED });
         }
       } catch (error) {
