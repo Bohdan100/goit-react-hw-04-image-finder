@@ -57,6 +57,7 @@ export const SearchResult = () => {
     largeImage: '',
     error: null,
   });
+
   useEffect(() => {
     if (!state.searchQuerry) {
       return;
