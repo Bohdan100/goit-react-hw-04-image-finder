@@ -171,20 +171,6 @@ export const SearchFormBtn = styled.button`
   }
 `;
 
-export const SearchFormIcon = styled.svg`
-  stroke: currentColor;
-  fill: currentColor;
-  stroke-width: 0;
-  width: 16px;
-  height: 16px;
-  opacity: 0.6;
-
-  :hover,
-  :focus {
-    opacity: 1;
-  }
-`;
-
 export const SearchFormBtnLabel = styled.span`
   position: absolute;
   width: 1px;

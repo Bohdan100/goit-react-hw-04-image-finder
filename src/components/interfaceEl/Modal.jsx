@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
-import { HiXMark } from 'react-icons/hi2';
+import { ImCross } from 'react-icons/im';
 
 import {
   Overlay,
@@ -36,9 +36,9 @@ export const Modal = ({ src, onClose }) => {
   return createPortal(
     <Overlay onClick={handleBackdropClick}>
       <ModalWindow>
-        <img src={src} alt="" />
+        <img src={src} alt="modal window" />
         <ModalFormBtn type="submit" onClick={onClose}>
-          <HiXMark size="36px" />
+          <ImCross size="28px" />
           <ModalFormBtnLabel>Search</ModalFormBtnLabel>
         </ModalFormBtn>
       </ModalWindow>
