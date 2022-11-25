@@ -11,7 +11,12 @@ export const Loader = () => {
           radius="48"
           color="#4fa94d"
           ariaLabel="watch-loading"
-          wrapperStyle={{}}
+          wrapperStyle={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '30px',
+          }}
           wrapperClassName=""
           visible={true}
         />

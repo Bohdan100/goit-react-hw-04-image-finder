@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useState, useEffect } from 'react';
 
 import { fetchImages } from 'apiRequest';
 import {
@@ -30,9 +30,9 @@ const countReducer = (state, action) => {
     case 'page':
       return { ...state, page: state.page + action.payload };
 
-    case 'images':
-      return { ...state, images: action.payload };
-    // [...state.images, ...action.payload]
+    // case 'images':
+    //   return { ...state, images: action.payload };
+
     case 'status':
       return { ...state, status: action.payload };
 
@@ -52,11 +52,13 @@ export const SearchResult = () => {
   const [state, dispatch] = useReducer(countReducer, {
     searchQuerry: '',
     page: 1,
-    images: [],
+    // images: [],
     status: Status.IDLE,
     largeImage: '',
     error: null,
   });
+
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (!state.searchQuerry) {
@@ -76,10 +78,7 @@ export const SearchResult = () => {
         } else {
           renderSuccesNotification(renderImages, totalImages, state.page);
 
-          dispatch({
-            type: 'images',
-            payload: [...renderImages, ...state.images],
-          });
+          setImages(prevImages => [...prevImages, ...renderImages]);
 
           dispatch({ type: 'status', payload: Status.RESOLVED });
         }
@@ -91,11 +90,6 @@ export const SearchResult = () => {
     getRequestImages();
   }, [state.page, state.searchQuerry]);
 
-  // dispatch({
-  //   type: 'images',
-  //   payload: [...state.images, ...renderImages],
-  // });
-
   const handleSearchbarSubmit = newSearchName => {
     if (newSearchName === state.searchQuerry) {
       informativeNotification();
@@ -104,8 +98,8 @@ export const SearchResult = () => {
 
     dispatch({ type: 'searchQuerry', payload: newSearchName });
     dispatch({ type: 'page', payload: 1 - state.page });
-    dispatch({ type: 'images', payload: [] });
     dispatch({ type: 'status', payload: Status.PENDING });
+    setImages([]);
   };
 
   const loadMore = () => {
@@ -125,8 +119,6 @@ export const SearchResult = () => {
     dispatch({ type: 'largeImage', payload: '' });
   };
 
-  console.log('state.images', state.images);
-
   return (
     <>
       <Searchbar handleSearchbarSubmit={handleSearchbarSubmit} />
@@ -140,7 +132,7 @@ export const SearchResult = () => {
       )}
       {state.status === Status.RESOLVED && (
         <>
-          <ImageGallery images={state.images} onClick={handleClickFromItem} />
+          <ImageGallery images={images} onClick={handleClickFromItem} />
           <Button loadMore={loadMore} />
           {state.largeImage.length > 0 && (
             <Modal src={state.largeImage} onClose={onModalClose} />
