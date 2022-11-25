@@ -32,7 +32,7 @@ const countReducer = (state, action) => {
 
     case 'images':
       return { ...state, images: action.payload };
-
+    // [...state.images, ...action.payload]
     case 'status':
       return { ...state, status: action.payload };
 
@@ -76,10 +76,11 @@ export const SearchResult = () => {
         } else {
           renderSuccesNotification(renderImages, totalImages, state.page);
 
-          // dispatch({
-          //   type: 'images',
-          //   payload: [...state.images, ...renderImages],
-          // });
+          dispatch({
+            type: 'images',
+            payload: [...renderImages, ...state.images],
+          });
+
           dispatch({ type: 'status', payload: Status.RESOLVED });
         }
       } catch (error) {
@@ -89,6 +90,11 @@ export const SearchResult = () => {
     }
     getRequestImages();
   }, [state.page, state.searchQuerry]);
+
+  // dispatch({
+  //   type: 'images',
+  //   payload: [...state.images, ...renderImages],
+  // });
 
   const handleSearchbarSubmit = newSearchName => {
     if (newSearchName === state.searchQuerry) {
@@ -118,6 +124,8 @@ export const SearchResult = () => {
   const onModalClose = () => {
     dispatch({ type: 'largeImage', payload: '' });
   };
+
+  console.log('state.images', state.images);
 
   return (
     <>

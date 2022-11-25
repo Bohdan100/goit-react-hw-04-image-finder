@@ -8,6 +8,7 @@ export const ImageGallery = ({ images, onClick }) => {
     onClick(largeImage);
   };
 
+  console.log('ImageGallery', images);
   return (
     // as="ul": div --> ul
     <Box
