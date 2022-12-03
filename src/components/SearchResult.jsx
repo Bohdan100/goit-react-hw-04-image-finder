@@ -122,6 +122,9 @@ export const SearchResult = () => {
   return (
     <>
       <Searchbar handleSearchbarSubmit={handleSearchbarSubmit} />
+      {images.length > 0 && (
+        <ImageGallery images={images} onClick={handleClickFromItem} />
+      )}
 
       {state.status === Status.IDLE && (
         <IdleText>Search images and photos</IdleText>
@@ -132,7 +135,6 @@ export const SearchResult = () => {
       )}
       {state.status === Status.RESOLVED && (
         <>
-          <ImageGallery images={images} onClick={handleClickFromItem} />
           <Button loadMore={loadMore} />
           {state.largeImage.length > 0 && (
             <Modal src={state.largeImage} onClose={onModalClose} />
